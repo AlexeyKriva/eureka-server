@@ -11,7 +11,7 @@ RUN mvn package -DskipTests
 
 FROM openjdk:17-jdk
 
-COPY /target/eureka-server-0.0.1-SNAPSHOT.jar /eureka/launch-eureka.jar
+COPY /target/eureka-server*.jar /eureka/launch-eureka.jar
 
 ENTRYPOINT ["java","-jar","/eureka/launch-eureka.jar"]
 

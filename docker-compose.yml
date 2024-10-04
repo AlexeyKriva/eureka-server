@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   kafka:
-    image: 'bitnami/kafka:latest'
+    image: bitnami/kafka
     environment:
       - KAFKA_CFG_NODE_ID=0
       - KAFKA_CFG_PROCESS_ROLES=controller,broker
@@ -14,6 +14,7 @@ services:
       - app-network
 
   eureka-server:
+#    image: eur
     build:
       context: .
       dockerfile: Dockerfile
@@ -41,7 +42,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 98479847
     ports:
-      - "33335:5432"
+      - "8180:5432"
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
@@ -52,6 +53,7 @@ services:
       - app-network
 
   passenger-microservice:
+#    image: pass
     build:
       context: /Users/aliaksei/Desktop/Modsen/passenger-microservice
       dockerfile: Dockerfile
@@ -81,6 +83,7 @@ services:
       - app-network
 
   driver-microservice:
+#    image: driv
     build:
       context: /Users/aliaksei/Desktop/Modsen/driver-microservice
       dockerfile: Dockerfile
@@ -90,6 +93,8 @@ services:
       eureka-server:
         condition: service_healthy
       postgres:
+        condition: service_healthy
+      passenger-microservice:
         condition: service_healthy
     ports:
       - "8082:8082"
@@ -110,18 +115,13 @@ services:
       - app-network
 
   rides-microservice:
+#    image: ride
     build:
       context: /Users/aliaksei/Desktop/Modsen/rides-microservice
       dockerfile: Dockerfile
     #restart: always
     container_name: rides-microservice
     depends_on:
-      eureka-server:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-      passenger-microservice:
-        condition: service_healthy
       driver-microservice:
         condition: service_healthy
     ports:
@@ -132,6 +132,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: 98479847
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      PASSENGER_SERVER_URL: http://passenger-microservice:8081/api/passenger
+      DRIVER_SERVER_URL: http://driver-microservice:8082/api/passenger
     healthcheck:
       test: [ "CMD-SHELL", "curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8083/" ]
       interval: 10s
@@ -142,16 +144,13 @@ services:
       - app-network
 
   rating-microservice:
+#    image: rat
     build:
       context: /Users/aliaksei/Desktop/Modsen/rating-microservice
       dockerfile: Dockerfile
     #restart: always
     container_name: rating-microservice
     depends_on:
-      eureka-server:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
       rides-microservice:
         condition: service_healthy
     ports:
@@ -162,6 +161,9 @@ services:
       SPRING_DATASOURCE_PASSWORD: 98479847
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      PASSENGER_RATING_SERVER_URL: http://passenger-microservice:8081/api/passenger/rating
+      DRIVER_RATING_SERVER_URL: http://driver-microservice:8082/api/driver/rating
+      RIDE_SERVER_URL: http://rides-microservice:8083/api/ride
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     healthcheck:
       test: [ "CMD-SHELL", "curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8084/" ]
@@ -173,18 +175,13 @@ services:
       - app-network
 
   api-gateway:
+#    image: gate
     build:
       context: /Users/aliaksei/Desktop/Modsen/api-gateway
       dockerfile: Dockerfile
     #restart: always
     container_name: api-gateway
     depends_on:
-      passenger-microservice:
-        condition: service_healthy
-      driver-microservice:
-        condition: service_healthy
-      rides-microservice:
-        condition: service_healthy
       rating-microservice:
         condition: service_healthy
     ports:
