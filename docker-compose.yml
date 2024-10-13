@@ -133,7 +133,7 @@ services:
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
       PASSENGER_SERVER_URL: http://passenger-microservice:8081/api/passenger
-      DRIVER_SERVER_URL: http://driver-microservice:8082/api/passenger
+      DRIVER_SERVER_URL: http://driver-microservice:8082/api/driver
     healthcheck:
       test: [ "CMD-SHELL", "curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8083/" ]
       interval: 10s
@@ -144,7 +144,6 @@ services:
       - app-network
 
   rating-microservice:
-#    image: rat
     build:
       context: /Users/aliaksei/Desktop/Modsen/rating-microservice
       dockerfile: Dockerfile
