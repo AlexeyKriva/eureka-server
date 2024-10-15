@@ -160,8 +160,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: 98479847
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
-      PASSENGER_RATING_SERVER_URL: http://passenger-microservice:8081/api/passenger/rating
-      DRIVER_RATING_SERVER_URL: http://driver-microservice:8082/api/driver/rating
       RIDE_SERVER_URL: http://rides-microservice:8083/api/ride
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     healthcheck:

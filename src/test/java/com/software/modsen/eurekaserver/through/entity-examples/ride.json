@@ -1,0 +1,37 @@
+{
+  "id": 1,
+  "passenger": {
+    "id": 1,
+    "name": "Kirill",
+    "email": "kirill@gmail.com",
+    "phoneNumber": "+375293878555",
+    "deleted": false
+  },
+  "driver": {
+    "id": 1,
+    "name": "Vadim",
+    "email": "vadim@gmail.com",
+    "phoneNumber": "+375293878333",
+    "sex": "MALE",
+    "car": {
+      "id": 1,
+      "color": "WHITE",
+      "brand": "BENTLEY",
+      "carNumber": "1234AA-1",
+      "deleted": false
+    },
+    "deleted": false
+  },
+  "fromAddress": "Nezavisimosty 1",
+  "toAddress": "Nezavisimosty 100",
+  "rideStatus": "COMPLETED",
+  "orderDateTime": [
+    2024,
+    3,
+    15,
+    12,
+    0
+  ],
+  "price": 150.0,
+  "currency": "BYN"
+}
