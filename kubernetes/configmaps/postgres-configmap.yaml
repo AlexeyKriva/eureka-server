@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-cm
+data:
+  db-driver: "org.postgresql.Driver"
+  url: "jdbc:postgresql://aggregator-postgres-service:5432/cab-aggregator-db"
+  username: "postgres"
+  password: "98479847"

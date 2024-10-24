@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aggregator-passenger-service
+spec:
+  type: NodePort
+  ports:
+    - port: 8081
+      name: http
+  selector:
+    app: aggregator-passenger

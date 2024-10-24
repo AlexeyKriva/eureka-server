@@ -12,9 +12,9 @@ services:
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
     networks:
       - app-network
+    restart: always
 
   eureka-server:
-#    image: eur
     build:
       context: .
       dockerfile: Dockerfile
@@ -52,12 +52,37 @@ services:
     networks:
       - app-network
 
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./scripts/config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    networks:
+      app-network:
+        aliases:
+          - prometheus
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      app-network:
+        aliases:
+          - grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: always
+
   passenger-microservice:
-#    image: pass
     build:
       context: /Users/aliaksei/Desktop/Modsen/passenger-microservice
       dockerfile: Dockerfile
-    #restart: always
+    restart: always
     container_name: passenger-microservice
     depends_on:
       eureka-server:
@@ -83,11 +108,10 @@ services:
       - app-network
 
   driver-microservice:
-#    image: driv
     build:
       context: /Users/aliaksei/Desktop/Modsen/driver-microservice
       dockerfile: Dockerfile
-    #restart: always
+    restart: always
     container_name: driver-microservice
     depends_on:
       eureka-server:
@@ -115,11 +139,10 @@ services:
       - app-network
 
   rides-microservice:
-#    image: ride
     build:
       context: /Users/aliaksei/Desktop/Modsen/rides-microservice
       dockerfile: Dockerfile
-    #restart: always
+    restart: always
     container_name: rides-microservice
     depends_on:
       driver-microservice:
@@ -132,8 +155,8 @@ services:
       SPRING_DATASOURCE_PASSWORD: 98479847
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
-      PASSENGER_SERVER_URL: http://passenger-microservice:8081/api/passenger
-      DRIVER_SERVER_URL: http://driver-microservice:8082/api/driver
+      PASSENGER_SERVER_URL: http://passenger-microservice:8081/api/passengers
+      DRIVER_SERVER_URL: http://driver-microservice:8082/api/drivers
     healthcheck:
       test: [ "CMD-SHELL", "curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8083/" ]
       interval: 10s
@@ -147,7 +170,7 @@ services:
     build:
       context: /Users/aliaksei/Desktop/Modsen/rating-microservice
       dockerfile: Dockerfile
-    #restart: always
+    restart: always
     container_name: rating-microservice
     depends_on:
       rides-microservice:
@@ -160,7 +183,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: 98479847
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
       EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
-      RIDE_SERVER_URL: http://rides-microservice:8083/api/ride
+      RIDE_SERVER_URL: http://rides-microservice:8083/api/rides
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     healthcheck:
       test: [ "CMD-SHELL", "curl --write-out '%{http_code}' --silent --output /dev/null http://localhost:8084/" ]
@@ -172,11 +195,10 @@ services:
       - app-network
 
   api-gateway:
-#    image: gate
     build:
       context: /Users/aliaksei/Desktop/Modsen/api-gateway
       dockerfile: Dockerfile
-    #restart: always
+    restart: always
     container_name: api-gateway
     depends_on:
       rating-microservice:

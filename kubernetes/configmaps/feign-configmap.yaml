@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feign-cm
+data:
+  passenger-url: "http://aggregator-passenger-service:8081/api/passengers"
+  driver-url: "http://aggregator-driver-service:8082/api/drivers"
+  ride-url: "http://aggregator-rides-service:8083/api/rides"

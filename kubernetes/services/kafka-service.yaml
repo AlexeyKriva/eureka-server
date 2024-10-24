@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aggregator-kafka-service
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: 9092
+      name: '9092'
+    - port: 9093
+      name: '9093'
+  selector:
+    app: aggregator-kafka

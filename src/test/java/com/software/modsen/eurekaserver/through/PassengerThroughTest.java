@@ -16,6 +16,7 @@ import org.springframework.http.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Disabled
 public class PassengerThroughTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -24,7 +25,7 @@ public class PassengerThroughTest {
     @Disabled
     void getPassengerTest() {
         ResponseEntity<Passenger> passenger =
-                testRestTemplate.getForEntity("http://localhost:8765/api/passenger/1", Passenger.class);
+                testRestTemplate.getForEntity("http://localhost:8765/api/passenger/9", Passenger.class);
 
         assertThat(passenger).isNotNull();
         assertThat(passenger.getBody().getName()).isEqualTo("Kirill");

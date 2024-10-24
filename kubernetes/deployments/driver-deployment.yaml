@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-driver-deployment
+  labels:
+    app: aggregator-driver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-driver
+  template:
+    metadata:
+      labels:
+        app: aggregator-driver
+    spec:
+      containers:
+        - name: aggregator-driver
+          image: chalexl/driver-server:2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: password
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: db-driver
+            - name: EUREKA_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-cm
+                  key: default-zone
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: kafka-cm
+                  key: bootstrap-servers

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-eureka-server-deployment
+  labels:
+    app: aggregator-eureka-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-eureka-server
+  template:
+    metadata:
+      labels:
+        app: aggregator-eureka-server
+    spec:
+      containers:
+        - name: aggregator-eureka-server
+          image: chalexl/eureka-server:2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8761
+          env:
+            - name: EUREKA_SERVER_URL
+              value: http://aggregator-eureka-server-service:8761/eureka/

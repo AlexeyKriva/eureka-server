@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-rating-deployment
+  labels:
+    app: aggregator-rating
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-rating
+  template:
+    metadata:
+      labels:
+        app: aggregator-rating
+    spec:
+      containers:
+        - name: aggregator-rating
+          image: chalexl/rating-server:2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8084
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: password
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: db-driver
+            - name: EUREKA_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-cm
+                  key: default-zone
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: kafka-cm
+                  key: bootstrap-servers
+            - name: RIDE_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: feign-cm
+                  key: ride-url

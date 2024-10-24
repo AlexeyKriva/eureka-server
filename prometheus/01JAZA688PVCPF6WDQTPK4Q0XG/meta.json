@@ -1,0 +1,17 @@
+{
+	"ulid": "01JAZA688PVCPF6WDQTPK4Q0XG",
+	"minTime": 1729148656364,
+	"maxTime": 1729152000000,
+	"stats": {
+		"numSamples": 14861,
+		"numSeries": 108,
+		"numChunks": 201
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01JAZA688PVCPF6WDQTPK4Q0XG"
+		]
+	},
+	"version": 1
+}

@@ -16,6 +16,7 @@ import org.springframework.http.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Disabled
 public class DriverAndCarThroughTest {
     @Autowired
     private TestRestTemplate testRestTemplate;

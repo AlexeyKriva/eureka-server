@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-postgres-deployment
+  labels:
+    app: aggregator-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-postgres
+  template:
+    metadata:
+      labels:
+        app: aggregator-postgres
+    spec:
+      containers:
+        - name: aggregator-postgres
+          image: postgres:15
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: cab-aggregator-db
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: "98479847"

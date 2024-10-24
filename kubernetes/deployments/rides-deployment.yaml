@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-rides-deployment
+  labels:
+    app: aggregator-rides
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-rides
+  template:
+    metadata:
+      labels:
+        app: aggregator-rides
+    spec:
+      containers:
+        - name: aggregator-rides
+          image: chalexl/ride-server:2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8083
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: username
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: password
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-cm
+                  key: db-driver
+            - name: EUREKA_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-cm
+                  key: default-zone
+            - name: PASSENGER_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: feign-cm
+                  key: passenger-url
+            - name: DRIVER_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: feign-cm
+                  key: driver-url
