@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: aggregator-driver-deployment
+  name: aggregator-rides-deployment
   labels:
-    app: aggregator-driver
+    app: aggregator-rides
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: aggregator-driver
+      app: aggregator-rides
   template:
     metadata:
       labels:
-        app: aggregator-driver
+        app: aggregator-rides
     spec:
       containers:
-        - name: aggregator-driver
-          image: chalexl/driver-server:2.0
+        - name: aggregator-rides
+          image: chalexl/ride-server:4.0
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8082
+            - containerPort: 8083
           env:
             - name: SPRING_DATASOURCE_URL
               valueFrom:
@@ -46,8 +46,18 @@ spec:
                 configMapKeyRef:
                   name: eureka-cm
                   key: default-zone
-            - name: KAFKA_BOOTSTRAP_SERVERS
+            - name: PASSENGER_SERVER_URL
               valueFrom:
                 configMapKeyRef:
-                  name: kafka-cm
-                  key: bootstrap-servers
+                  name: feign-cm
+                  key: passenger-url
+            - name: DRIVER_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: feign-cm
+                  key: driver-url
+            - name: KEYCLOAK_URI
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-uri

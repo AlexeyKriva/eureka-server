@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-auth-deployment
+  labels:
+    app: aggregator-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-auth
+  template:
+    metadata:
+      labels:
+        app: aggregator-auth
+    spec:
+      containers:
+        - name: aggregator-auth
+          image: chalexl/auth-server:0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8085
+          env:
+            - name: KEYCLOAK_REALM
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-realm
+            - name: KEYCLOAK_CLIENT_ID_ADMIN
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-client-id-admin
+            - name: KEYCLOAK_CLIENT_ID_USER
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-client-id-user
+            - name: KEYCLOAK_CLIENT_SECRET_USER
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-client-secret-user
+            - name: KEYCLOAK_GRANT_TYPE
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-grant-type
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: kafka-cm
+                  key: bootstrap-servers
+            - name: KEYCLOAK_URI
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-uri

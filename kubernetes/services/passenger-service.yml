@@ -5,7 +5,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8081
-      name: http
+    - port: 81
+      targetPort: 8081
+      protocol: TCP
   selector:
     app: aggregator-passenger

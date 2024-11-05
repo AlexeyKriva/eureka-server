@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-prometheus-deployment
+  labels:
+    app: aggregator-prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-prometheus
+  template:
+    metadata:
+      labels:
+        app: aggregator-prometheus
+    spec:
+      containers:
+        - name: aggregator-prometheus
+          image: prom/prometheus
+          ports:
+            - containerPort: 9090
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/prometheus
+      volumes:
+        - name: config-volume
+          configMap:
+            name: prometheus-cm

@@ -5,7 +5,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8082
-      name: http
+    - port: 82
+      targetPort: 8082
+      protocol: TCP
   selector:
     app: aggregator-driver

@@ -56,13 +56,12 @@ services:
     image: prom/prometheus
     ports:
       - "9090:9090"
-    volumes:
-      - ./scripts/config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus:/prometheus
     networks:
       app-network:
         aliases:
           - prometheus
+    volumes:
+      - ./scripts/config/prometheus.yml:/etc/prometheus/prometheus.yml
     restart: always
 
   grafana:

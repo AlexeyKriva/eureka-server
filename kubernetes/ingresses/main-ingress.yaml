@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress
+spec:
+  rules:
+    - host: cab.aggregator.com
+      http:
+        paths:
+          - pathType: Exact
+            path: /api/passenger
+            backend:
+              service:
+                name: aggregator-passenger-service
+                port:
+                  number: 81

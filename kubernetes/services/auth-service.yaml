@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: aggregator-rating-service
+  name: aggregator-auth-service
 spec:
   type: NodePort
   ports:
-    - port: 84
-      targetPort: 8084
+    - port: 85
+      targetPort: 8085
       protocol: TCP
   selector:
-    app: aggregator-rating
+    app: aggregator-auth

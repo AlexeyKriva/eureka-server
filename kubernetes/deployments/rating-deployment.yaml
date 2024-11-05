@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: aggregator-rating
-          image: chalexl/rating-server:2.0
+          image: chalexl/rating-server:4.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8084
@@ -56,3 +56,8 @@ spec:
                 configMapKeyRef:
                   name: feign-cm
                   key: ride-url
+            - name: KEYCLOAK_URI
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-auth-sec
+                  key: keycloak-uri

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregator-keycloak-deployment
+  labels:
+    app: aggregator-keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aggregator-keycloak
+  template:
+    metadata:
+      labels:
+        app: aggregator-keycloak
+    spec:
+      containers:
+        - name: aggregator-keycloak
+          image: keycloak/keycloak
+          args:
+            - "start-dev"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-sec
+                  key: keycloak-bootstrap-admin-user
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-sec
+                  key: keycloak-bootstrap-admin-password
